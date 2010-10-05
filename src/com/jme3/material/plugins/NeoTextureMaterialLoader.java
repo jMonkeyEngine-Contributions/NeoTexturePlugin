@@ -22,6 +22,8 @@ import java.util.logging.Logger;
  */
 public class NeoTextureMaterialLoader implements AssetLoader {
 
+    public static final Object neoLock = new Object();
+
     public Object load(AssetInfo assetInfo) throws IOException {
         NeoTextureMaterialKey key = null;
         int res = 1024;
@@ -33,27 +35,41 @@ public class NeoTextureMaterialLoader implements AssetLoader {
         }
 
         Material mat = new Material(assetInfo.getManager(), matDef);
-        
-        // setup texture generator
-        TextureGenerator.setUseCache(true);
-        TextureGenerator.loadGraph(assetInfo.openStream());
 
-        for (String n : TextureGenerator.getTextureNames()) {
-            Logger.getLogger(this.getClass().getName()).log(Level.FINE, "Found neo texture {0}", n);
-            // create the texture into an int[]
-            int[] data = TextureGenerator.generateTexture_ARGB(n, res, res);
+        synchronized (neoLock) {
+            // setup texture generator
+            TextureGenerator.setUseCache(true);
+            TextureGenerator.loadGraph(assetInfo.openStream());
 
-            ByteBuffer buffer = BufferUtils.createByteBuffer(data.length*4);//data);
-            for (int i = 0; i < data.length; i++) {
-                buffer.putInt(data[i]);
+            for (String n : TextureGenerator.getTextureNames()) {
+                Logger.getLogger(this.getClass().getName()).log(Level.FINE, "Found neo texture {0}", n);
+                // create the texture into an int[]
+                int[] data = TextureGenerator.generateTexture_ARGB(n, res, res);
+
+                ByteBuffer buffer = BufferUtils.createByteBuffer(data.length * 4);
+                buffer.asIntBuffer().put(data).clear();
+
+//                // flip the components the way AWT likes them
+//                for (int i = 0; i < res * res * 4; i+=4){
+//                    byte a = buffer.get(i+0);
+//                    byte r = buffer.get(i+1);
+//                    byte g = buffer.get(i+2);
+//                    byte b = buffer.get(i+3);
+//
+//                    buffer.put(i+0, r);
+//                    buffer.put(i+1, g);
+//                    buffer.put(i+2, b);
+//                    buffer.put(i+3, a);
+//                }
+//                buffer.clear();
+
+                Image image = new Image(Image.Format.RGBA8, res, res, buffer);
+                Texture2D texture = new Texture2D(image);
+                mat.setTexture(n, texture);
             }
-            Image image = new Image(Image.Format.RGBA8, res, res, buffer);
-            Texture2D texture = new Texture2D(image);
-            mat.setTexture(n, texture);
+
+            TextureGenerator.clearCache();
         }
-
-        TextureGenerator.clearCache();
-
         return mat;
     }
 }
