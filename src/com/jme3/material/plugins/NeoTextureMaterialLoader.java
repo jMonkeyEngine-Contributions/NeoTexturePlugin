@@ -43,18 +43,6 @@ public class NeoTextureMaterialLoader implements AssetLoader {
             // create the texture into an int[]
             int[] data = TextureGenerator.generateTexture_ARGB(n, res, res);
 
-            // flip the components the way AWT likes them
-//            for (int i = 0; i < res * res * 4; i += 4) {
-//                byte r = (byte) data[i + 0];
-//                byte g = (byte) data[i + 1];
-//                byte b = (byte) data[i + 2];
-//                byte a = (byte) data[i + 3];
-//                data[i + 0] = b;
-//                data[i + 1] = g;
-//                data[i + 2] = r;
-//                data[i + 3] = a;
-//            }
-
             ByteBuffer buffer = BufferUtils.createByteBuffer(data.length*4);//data);
             for (int i = 0; i < data.length; i++) {
                 buffer.putInt(data[i]);
