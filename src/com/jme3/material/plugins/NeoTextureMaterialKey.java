@@ -7,6 +7,7 @@ package com.jme3.material.plugins;
 
 import com.jme3.asset.AssetKey;
 import com.jme3.material.Material;
+import com.jme3.texture.Texture2D;
 
 /**
  *
@@ -15,6 +16,7 @@ import com.jme3.material.Material;
 public class NeoTextureMaterialKey extends AssetKey<Material>{
     private int resolution = 1024;
     private String materialDef = "Common/MatDefs/Light/Lighting.j3md";
+    private Texture2D.WrapMode wrapMode=Texture2D.WrapMode.Repeat;
 
     public NeoTextureMaterialKey() {
     }
@@ -45,6 +47,20 @@ public class NeoTextureMaterialKey extends AssetKey<Material>{
      */
     public void setMaterialDef(String materialDef) {
         this.materialDef = materialDef;
+    }
+
+    /**
+     * @return the wrapMode
+     */
+    public Texture2D.WrapMode getWrapMode() {
+        return wrapMode;
+    }
+
+    /**
+     * @param wrapMode the Texture wrapMode to set (default=Repeat)
+     */
+    public void setWrapMode(Texture2D.WrapMode wrapMode) {
+        this.wrapMode = wrapMode;
     }
 
 }

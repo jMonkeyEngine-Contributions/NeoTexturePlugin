@@ -7,13 +7,13 @@ package com.jme3.material.plugins;
 import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetLoader;
 import com.jme3.material.Material;
+import com.jme3.scene.shape.Sphere.TextureMode;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture2D;
 import com.jme3.util.BufferUtils;
 import com.mystictri.neotexture.TextureGenerator;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,10 +29,13 @@ public class NeoTextureMaterialLoader implements AssetLoader {
         NeoTextureMaterialKey key = null;
         int res = 1024;
         String matDef = "Common/MatDefs/Light/Lighting.j3md";
+        Texture2D.WrapMode mode = Texture2D.WrapMode.Repeat;
+
         if (assetInfo.getKey() instanceof NeoTextureMaterialKey) {
             key = (NeoTextureMaterialKey) assetInfo.getKey();
             res = key.getResolution();
             matDef = key.getMaterialDef();
+            mode = key.getWrapMode();
         }
 
         Material mat = new Material(assetInfo.getManager(), matDef);
@@ -51,16 +54,16 @@ public class NeoTextureMaterialLoader implements AssetLoader {
                 buffer.asIntBuffer().put(data).clear();
 
                 // flip the components the way jME3 likes them
-                for (int i = 0; i < res * res * 4; i+=4){
-                    byte b = buffer.get(i+0);
-                    byte g = buffer.get(i+1);
-                    byte r = buffer.get(i+2);
-                    byte a = buffer.get(i+3);
+                for (int i = 0; i < res * res * 4; i += 4) {
+                    byte b = buffer.get(i + 0);
+                    byte g = buffer.get(i + 1);
+                    byte r = buffer.get(i + 2);
+                    byte a = buffer.get(i + 3);
 
-                    buffer.put(i+0, r);//r
-                    buffer.put(i+1, g);//g
-                    buffer.put(i+2, b);//b
-                    buffer.put(i+3, a);
+                    buffer.put(i + 0, r);//r
+                    buffer.put(i + 1, g);//g
+                    buffer.put(i + 2, b);//b
+                    buffer.put(i + 3, a);
                 }
                 buffer.clear();
 
