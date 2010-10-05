@@ -13,6 +13,7 @@ import com.jme3.util.BufferUtils;
 import com.mystictri.neotexture.TextureGenerator;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,19 +50,19 @@ public class NeoTextureMaterialLoader implements AssetLoader {
                 ByteBuffer buffer = BufferUtils.createByteBuffer(data.length * 4);
                 buffer.asIntBuffer().put(data).clear();
 
-//                // flip the components the way AWT likes them
-//                for (int i = 0; i < res * res * 4; i+=4){
-//                    byte a = buffer.get(i+0);
-//                    byte r = buffer.get(i+1);
-//                    byte g = buffer.get(i+2);
-//                    byte b = buffer.get(i+3);
-//
-//                    buffer.put(i+0, r);
-//                    buffer.put(i+1, g);
-//                    buffer.put(i+2, b);
-//                    buffer.put(i+3, a);
-//                }
-//                buffer.clear();
+                // flip the components the way jME3 likes them
+                for (int i = 0; i < res * res * 4; i+=4){
+                    byte b = buffer.get(i+0);
+                    byte g = buffer.get(i+1);
+                    byte r = buffer.get(i+2);
+                    byte a = buffer.get(i+3);
+
+                    buffer.put(i+0, r);//r
+                    buffer.put(i+1, g);//g
+                    buffer.put(i+2, b);//b
+                    buffer.put(i+3, a);
+                }
+                buffer.clear();
 
                 Image image = new Image(Image.Format.RGBA8, res, res, buffer);
                 Texture2D texture = new Texture2D(image);
