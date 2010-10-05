@@ -14,7 +14,14 @@ import com.jme3.material.Material;
  */
 public class NeoTextureMaterialKey extends AssetKey<Material>{
     private int resolution = 1024;
-    private String materialDef = "Commons/MatDefs/Light/Lighting.j3md";
+    private String materialDef = "Common/MatDefs/Light/Lighting.j3md";
+
+    public NeoTextureMaterialKey() {
+    }
+
+    public NeoTextureMaterialKey(String name) {
+        super(name);
+    }
 
     public int getResolution() {
         return resolution;

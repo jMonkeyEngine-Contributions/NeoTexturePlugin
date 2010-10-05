@@ -13,6 +13,8 @@ import com.jme3.util.BufferUtils;
 import com.mystictri.neotexture.TextureGenerator;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,23 +39,27 @@ public class NeoTextureMaterialLoader implements AssetLoader {
         TextureGenerator.loadGraph(assetInfo.openStream());
 
         for (String n : TextureGenerator.getTextureNames()) {
+            Logger.getLogger(this.getClass().getName()).log(Level.FINE, "Found neo texture {0}", n);
             // create the texture into an int[]
             int[] data = TextureGenerator.generateTexture_ARGB(n, res, res);
 
             // flip the components the way AWT likes them
-            for (int i = 0; i < res * res * 4; i += 4) {
-                byte r = (byte) data[i + 0];
-                byte g = (byte) data[i + 1];
-                byte b = (byte) data[i + 2];
-                byte a = (byte) data[i + 3];
-                data[i + 0] = b;
-                data[i + 1] = g;
-                data[i + 2] = r;
-                data[i + 3] = a;
-            }
+//            for (int i = 0; i < res * res * 4; i += 4) {
+//                byte r = (byte) data[i + 0];
+//                byte g = (byte) data[i + 1];
+//                byte b = (byte) data[i + 2];
+//                byte a = (byte) data[i + 3];
+//                data[i + 0] = b;
+//                data[i + 1] = g;
+//                data[i + 2] = r;
+//                data[i + 3] = a;
+//            }
 
-            ByteBuffer buffer = BufferUtils.createByteBuffer();//data);
-            Image image = new Image(Image.Format.ABGR8, res, res, buffer);
+            ByteBuffer buffer = BufferUtils.createByteBuffer(data.length*4);//data);
+            for (int i = 0; i < data.length; i++) {
+                buffer.putInt(data[i]);
+            }
+            Image image = new Image(Image.Format.RGBA8, res, res, buffer);
             Texture2D texture = new Texture2D(image);
             mat.setTexture(n, texture);
         }
