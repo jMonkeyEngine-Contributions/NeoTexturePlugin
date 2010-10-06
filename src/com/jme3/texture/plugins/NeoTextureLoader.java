@@ -13,6 +13,8 @@ import com.jme3.util.BufferUtils;
 import com.mystictri.neotexture.TextureGenerator;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,7 +33,7 @@ public class NeoTextureLoader implements AssetLoader {
             textureName = key.getTextureName();
             useCache = key.isUseCache();
         }
-
+        Logger.getLogger(this.getClass().getName()).log(Level.FINE, "Search texture: {0}", textureName);
         synchronized (NeoTextureMaterialLoader.neoLock) {
             // setup texture generator
             TextureGenerator.setUseCache(useCache);
@@ -45,9 +47,11 @@ public class NeoTextureLoader implements AssetLoader {
                     buffer.asIntBuffer().put(data).clear();
 
                     Image image = new Image(Image.Format.RGBA8, res, res, buffer);
-                    Texture2D texture = new Texture2D(image);
-                    TextureGenerator.clearCache();
-                    return texture;
+                    if (useCache) {
+                        TextureGenerator.clearCache();
+                        
+                    }
+                    return image;
                 }
             }
             if (useCache) {

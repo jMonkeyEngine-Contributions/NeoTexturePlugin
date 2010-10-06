@@ -10,8 +10,9 @@
 <project name="NeoTexturePlugin" default="default" basedir=".">
     <description>Builds, tests, and runs the project NeoTexturePlugin.</description>
     <import file="nbproject/build-impl.xml"/>
-    <target name="-post-jar">
+    <target name="-post-jar" depends="javadoc">
         <copy file="dist/NeoTexturePlugin.jar" todir="../NeoTextureEditor/release/libs/"/>
+        <zip basedir="dist/javadoc" zipfile="../NeoTextureEditor/release/libs/javadoc.zip"/>
     </target>
     <!--
 

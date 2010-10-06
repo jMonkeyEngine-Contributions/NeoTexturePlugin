@@ -5,17 +5,20 @@
 
 package com.jme3.texture.plugins;
 
-import com.jme3.asset.AssetKey;
-import com.jme3.texture.Texture2D;
+import com.jme3.asset.TextureKey;
 
 /**
  *
  * @author normenhansen
  */
-public class NeoTextureKey extends AssetKey<Texture2D>{
+public class NeoTextureKey extends TextureKey{
     private int resolution = 1024;
     private String textureName = "texture";
     private boolean useCache = true;
+
+    public NeoTextureKey(String name) {
+        super(name);
+    }
 
     public int getResolution() {
         return resolution;
@@ -39,6 +42,11 @@ public class NeoTextureKey extends AssetKey<Texture2D>{
 
     public void setUseCache(boolean useCache) {
         this.useCache = useCache;
+    }
+
+    @Override
+    public Object postProcess(Object asset) {
+        return asset;
     }
 
 }
