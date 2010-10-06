@@ -30,49 +30,40 @@ public class NeoTextureMaterialLoader implements AssetLoader {
         int res = 1024;
         String matDef = "Common/MatDefs/Light/Lighting.j3md";
         Texture2D.WrapMode mode = Texture2D.WrapMode.Repeat;
+        boolean useCache = true;
 
         if (assetInfo.getKey() instanceof NeoTextureMaterialKey) {
             key = (NeoTextureMaterialKey) assetInfo.getKey();
             res = key.getResolution();
             matDef = key.getMaterialDef();
             mode = key.getWrapMode();
+            useCache = key.isUseCache();
         }
 
         Material mat = new Material(assetInfo.getManager(), matDef);
 
         synchronized (neoLock) {
             // setup texture generator
-            TextureGenerator.setUseCache(true);
+            TextureGenerator.setUseCache(useCache);
             TextureGenerator.loadGraph(assetInfo.openStream());
 
             for (String n : TextureGenerator.getTextureNames()) {
                 Logger.getLogger(this.getClass().getName()).log(Level.FINE, "Found neo texture {0}", n);
                 // create the texture into an int[]
-                int[] data = TextureGenerator.generateTexture_ARGB(n, res, res);
+                int[] data = TextureGenerator.generateTexture_ABGR(n, res, res);
 
                 ByteBuffer buffer = BufferUtils.createByteBuffer(data.length * 4);
                 buffer.asIntBuffer().put(data).clear();
 
-                // flip the components the way jME3 likes them
-                for (int i = 0; i < res * res * 4; i += 4) {
-                    byte b = buffer.get(i + 0);
-                    byte g = buffer.get(i + 1);
-                    byte r = buffer.get(i + 2);
-                    byte a = buffer.get(i + 3);
-
-                    buffer.put(i + 0, r);//r
-                    buffer.put(i + 1, g);//g
-                    buffer.put(i + 2, b);//b
-                    buffer.put(i + 3, a);
-                }
-                buffer.clear();
-
                 Image image = new Image(Image.Format.RGBA8, res, res, buffer);
                 Texture2D texture = new Texture2D(image);
+                texture.setWrap(mode);
                 mat.setTexture(n, texture);
             }
 
-            TextureGenerator.clearCache();
+            if (useCache) {
+                TextureGenerator.clearCache();
+            }
         }
         return mat;
     }

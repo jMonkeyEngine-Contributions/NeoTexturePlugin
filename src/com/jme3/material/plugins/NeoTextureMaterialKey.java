@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.jme3.material.plugins;
 
 import com.jme3.asset.AssetKey;
@@ -13,10 +12,12 @@ import com.jme3.texture.Texture2D;
  *
  * @author normenhansen
  */
-public class NeoTextureMaterialKey extends AssetKey<Material>{
+public class NeoTextureMaterialKey extends AssetKey<Material> {
+
     private int resolution = 1024;
     private String materialDef = "Common/MatDefs/Light/Lighting.j3md";
-    private Texture2D.WrapMode wrapMode=Texture2D.WrapMode.Repeat;
+    private Texture2D.WrapMode wrapMode = Texture2D.WrapMode.Repeat;
+    private boolean useCache = true;
 
     public NeoTextureMaterialKey() {
     }
@@ -63,4 +64,11 @@ public class NeoTextureMaterialKey extends AssetKey<Material>{
         this.wrapMode = wrapMode;
     }
 
+    public boolean isUseCache() {
+        return useCache;
+    }
+
+    public void setUseCache(boolean useCache) {
+        this.useCache = useCache;
+    }
 }

@@ -15,6 +15,7 @@ import com.jme3.texture.Texture2D;
 public class NeoTextureKey extends AssetKey<Texture2D>{
     private int resolution = 1024;
     private String textureName = "texture";
+    private boolean useCache = true;
 
     public int getResolution() {
         return resolution;
@@ -32,6 +33,12 @@ public class NeoTextureKey extends AssetKey<Texture2D>{
         this.textureName = textureName;
     }
 
-    
+    public boolean isUseCache() {
+        return useCache;
+    }
+
+    public void setUseCache(boolean useCache) {
+        this.useCache = useCache;
+    }
 
 }

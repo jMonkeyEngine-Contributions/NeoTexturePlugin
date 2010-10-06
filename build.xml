@@ -10,6 +10,9 @@
 <project name="NeoTexturePlugin" default="default" basedir=".">
     <description>Builds, tests, and runs the project NeoTexturePlugin.</description>
     <import file="nbproject/build-impl.xml"/>
+    <target name="-post-jar">
+        <copy file="dist/NeoTexturePlugin.jar" todir="../NeoTextureEditor/release/libs/"/>
+    </target>
     <!--
 
     There exist several targets which are by default empty and which can be 

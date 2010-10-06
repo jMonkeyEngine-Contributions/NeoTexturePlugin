@@ -24,21 +24,23 @@ public class NeoTextureLoader implements AssetLoader {
         NeoTextureKey key = null;
         int res = 1024;
         String textureName = "texture";
+        boolean useCache = true;
         if (assetInfo.getKey() instanceof NeoTextureKey) {
             key = (NeoTextureKey) assetInfo.getKey();
             res = key.getResolution();
             textureName = key.getTextureName();
+            useCache = key.isUseCache();
         }
 
         synchronized (NeoTextureMaterialLoader.neoLock) {
             // setup texture generator
-            TextureGenerator.setUseCache(true);
+            TextureGenerator.setUseCache(useCache);
             TextureGenerator.loadGraph(assetInfo.openStream());
 
             for (String n : TextureGenerator.getTextureNames()) {
                 // create the texture into an int[]
                 if (n.equals(textureName)) {
-                    int[] data = TextureGenerator.generateTexture_ARGB(n, res, res);
+                    int[] data = TextureGenerator.generateTexture_ABGR(n, res, res);
                     ByteBuffer buffer = BufferUtils.createByteBuffer(data.length * 4);
                     buffer.asIntBuffer().put(data).clear();
 
@@ -62,8 +64,9 @@ public class NeoTextureLoader implements AssetLoader {
                     return texture;
                 }
             }
-
-            TextureGenerator.clearCache();
+            if (useCache) {
+                TextureGenerator.clearCache();
+            }
         }
         return null;
     }
