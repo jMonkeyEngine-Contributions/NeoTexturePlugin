@@ -31,13 +31,8 @@ public class NeoTextureLocator implements AssetLocator {
         String ext = key.getExtension();
         if (name.indexOf("?") > -1) {
             String[] strings = name.split("\\?");
-            for (int i = 0; i < strings.length; i++) {
-                String string = strings[i];
-                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Neo texture string: {0}", string);
-            }
             tgrName = strings[0] + "." + ext;
             textureName = strings[1].substring(0, strings[1].lastIndexOf('.'));
-            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Neo texture name: {0}", textureName);
         } else {
             return null;
         }
@@ -49,7 +44,6 @@ public class NeoTextureLocator implements AssetLocator {
             neoKey.setUseCache(orig.isUseCache());
         }
         neoKey.setTextureName(textureName);
-//        neoKey.asset=arsch;
         AssetInfo info = manager.locateAsset(neoKey);
         return info;
     }
