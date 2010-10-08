@@ -12,6 +12,7 @@
     <import file="nbproject/build-impl.xml"/>
     <target name="-post-jar" depends="javadoc">
         <copy file="dist/NeoTexturePlugin.jar" todir="../NeoTextureEditor/release/libs/"/>
+        <copy file="dist/NeoTexturePlugin.jar" todir="../NeoTextureEditor/release/modules/ext/"/>
         <zip basedir="dist/javadoc" zipfile="../NeoTextureEditor/release/libs/javadoc.zip"/>
     </target>
     <!--
