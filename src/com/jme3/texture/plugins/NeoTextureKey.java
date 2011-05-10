@@ -43,10 +43,4 @@ public class NeoTextureKey extends TextureKey{
     public void setUseCache(boolean useCache) {
         this.useCache = useCache;
     }
-
-    @Override
-    public Object postProcess(Object asset) {
-        return asset;
-    }
-
 }
