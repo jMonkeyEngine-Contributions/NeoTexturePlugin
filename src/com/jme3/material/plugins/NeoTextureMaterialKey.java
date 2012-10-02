@@ -4,15 +4,14 @@
  */
 package com.jme3.material.plugins;
 
-import com.jme3.asset.AssetKey;
-import com.jme3.material.Material;
+import com.jme3.asset.MaterialKey;
 import com.jme3.texture.Texture2D;
 
 /**
  *
  * @author normenhansen
  */
-public class NeoTextureMaterialKey extends AssetKey<Material> {
+public class NeoTextureMaterialKey extends MaterialKey {
 
     private int resolution = 1024;
     private String materialDef = "Common/MatDefs/Light/Lighting.j3md";
